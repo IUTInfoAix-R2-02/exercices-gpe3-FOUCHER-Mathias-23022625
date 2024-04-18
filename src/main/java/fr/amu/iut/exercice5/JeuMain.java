@@ -12,6 +12,8 @@ public class JeuMain extends Application {
 
     private Scene scene;
     private BorderPane root;
+    private Obstacle carreun = new Obstacle(300,200, 100,300);
+    private Obstacle carredeu = new Obstacle(600,400, 200,600);
 
     @Override
     public void start(Stage primaryStage) {
@@ -28,8 +30,7 @@ public class JeuMain extends Application {
         jeu.setPrefSize(640, 480);
         jeu.getChildren().add(pacman);
         jeu.getChildren().add(fantome);
-        Obstacle carreun = new Obstacle(300,200, 100,300);
-        Obstacle carredeu = new Obstacle(600,400, 200,600);
+
 
         jeu.getChildren().addAll(carreun,carredeu);
         root.setCenter(jeu);
@@ -54,36 +55,73 @@ public class JeuMain extends Application {
      */
     private void deplacer(Personnage j1, Personnage j2) {
         scene.setOnKeyPressed((KeyEvent event) -> {
-            switch (event.getCode()) {
-                case LEFT:
-                    j1.deplacerAGauche();
-                    break;
-                case RIGHT:
-                    j1.deplacerADroite(scene.getWidth());
-                    break;
-                case DOWN:
-                    j1.deplacerEnBas(scene.getHeight());
-                    break;
-                case UP:
-                    j1.deplacerEnHaut();
-                    break;
-                case Z:
-                    j2.deplacerEnHaut();
-                    break;
-                case S:
-                    j2.deplacerEnBas(scene.getHeight());
-                    break;
-                case Q:
-                    j2.deplacerAGauche();
-                    break;
-                case D:
-                    j2.deplacerADroite(scene.getWidth());
-                    break;
-            }
-            if (j1.estEnCollision(j2)){
+                switch (event.getCode()) {
+                    case LEFT:
+                        j1.deplacerAGauche();
+                        if (j1.estEnCollisionObs(carreun)|| j2.estEnCollisionObs(carreun) || j1.estEnCollisionObs(carredeu) || j2.estEnCollisionObs(carredeu)) {
+                            System.out.println("Collision avec objet");
+                            j1.deplacerADroite(scene.getWidth());
+                        }
+                        break;
+                    case RIGHT:
+
+                        j1.deplacerADroite(scene.getWidth());
+                        if(j1.estEnCollisionObs(carreun)|| j2.estEnCollisionObs(carreun) || j1.estEnCollisionObs(carredeu) || j2.estEnCollisionObs(carredeu)) {
+                        System.out.println("Collision avec objet");
+                        j1.deplacerAGauche();
+                    }
+                        break;
+                    case DOWN:
+                        j1.deplacerEnBas(scene.getHeight());
+                        if(j1.estEnCollisionObs(carreun)|| j2.estEnCollisionObs(carreun) || j1.estEnCollisionObs(carredeu) || j2.estEnCollisionObs(carredeu)) {
+                            System.out.println("Collision avec objet");
+                            j1.deplacerEnHaut();
+                        }
+                        break;
+                    case UP:
+                        j1.deplacerEnHaut();
+                        if(j1.estEnCollisionObs(carreun)|| j2.estEnCollisionObs(carreun) || j1.estEnCollisionObs(carredeu) || j2.estEnCollisionObs(carredeu)) {
+                            System.out.println("Collision avec objet");
+                            j1.deplacerEnBas(scene.getHeight());
+                        }
+                        break;
+                    case Z:
+                        j2.deplacerEnHaut();
+                        if(j1.estEnCollisionObs(carreun)|| j2.estEnCollisionObs(carreun) || j1.estEnCollisionObs(carredeu) || j2.estEnCollisionObs(carredeu)) {
+                            System.out.println("Collision avec objet");
+                            j2.deplacerEnBas(scene.getHeight());
+                        }
+                        break;
+                    case S:
+                        j2.deplacerEnBas(scene.getHeight());
+                        if(j1.estEnCollisionObs(carreun)|| j2.estEnCollisionObs(carreun) || j1.estEnCollisionObs(carredeu) || j2.estEnCollisionObs(carredeu)) {
+                            System.out.println("Collision avec objet");
+                            j2.deplacerEnHaut();
+                        }
+                        break;
+                    case Q:
+                        j2.deplacerAGauche();
+                        if (j1.estEnCollisionObs(carreun)|| j2.estEnCollisionObs(carreun) || j1.estEnCollisionObs(carredeu) || j2.estEnCollisionObs(carredeu)) {
+                            System.out.println("Collision avec objet");
+                            j2.deplacerADroite(scene.getWidth());
+                        }
+                        break;
+                    case D:
+                        j2.deplacerADroite(scene.getWidth());
+                        if(j1.estEnCollisionObs(carreun)|| j2.estEnCollisionObs(carreun) || j1.estEnCollisionObs(carredeu) || j2.estEnCollisionObs(carredeu)) {
+                            System.out.println("Collision avec objet");
+                            j2.deplacerAGauche();
+                        }
+                        break;
+                }
+            if (j1.estEnCollision(j2)) {
                 System.out.println("Collision....");
                 Platform.exit();
             }
+            if (j1.estEnCollisionObs(carreun)|| j2.estEnCollisionObs(carreun) || j1.estEnCollisionObs(carredeu) || j2.estEnCollisionObs(carredeu)) {
+                System.out.println("Collision....");
+            }
+
         });
     }
 

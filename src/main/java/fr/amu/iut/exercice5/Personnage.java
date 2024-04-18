@@ -25,6 +25,7 @@ class Personnage extends Group {
         //    ****
 
         //déplacement <----
+
         if (getLayoutX() >= LARGEUR_PERSONNAGE) {
             setLayoutX(getLayoutX() - LARGEUR_PERSONNAGE);
         }
@@ -73,4 +74,8 @@ class Personnage extends Group {
                 || autrePersonnage.getBoundsInParent().contains(getBoundsInParent());
     }
 
+    boolean estEnCollisionObs(Obstacle obs) {
+        return getBoundsInParent().contains(obs.getBoundsInParent())
+                || obs.getBoundsInParent().contains(getBoundsInParent());
+    }
 }
