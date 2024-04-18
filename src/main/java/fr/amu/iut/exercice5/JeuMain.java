@@ -16,6 +16,7 @@ public class JeuMain extends Application {
     private Obstacle carredeu = new Obstacle(600,400, 200,600);
 
     @Override
+
     public void start(Stage primaryStage) {
 
         root = new BorderPane();

@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Dico {
+public class Dico extends IHMPendu{
 
     private final ArrayList<String> listeMots;
 
