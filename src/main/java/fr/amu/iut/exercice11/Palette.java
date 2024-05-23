@@ -1,7 +1,6 @@
 package fr.amu.iut.exercice11;
 
 import javafx.application.Application;
-import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.geometry.Insets;
@@ -34,30 +33,31 @@ public class Palette extends Application {
     private BorderPane root;
     private Pane panneau;
     private HBox boutons;
+    private StringProperty nomDuButton = new SimpleStringProperty();
+    private StringProperty couleurPanneau = new SimpleStringProperty("#000000");
 
     private Label texteDuBas;
 
-    private  IntegerProperty nbfois = new SimpleIntegerProperty();
+    private  IntegerProperty nbFois = new SimpleIntegerProperty(0);
 
     private BooleanProperty pasEncoreDeClic;
 
     public void createBindings() {
         createPasEncoreDeClicBinding();
-        bindTextDuHaut();
     }
 
     private void createPasEncoreDeClicBinding() {
-        pasEncoreDeClic = new SimpleBooleanProperty();
-        pasEncoreDeClic.bind(Bindings.notEqual(0, nbfois));
+        BooleanProperty pasEncoreDeClic = new SimpleBooleanProperty(false);
+        pasEncoreDeClic.bind(Bindings.equal(0, nbFois));
+        texteDuHaut.textProperty().bind(Bindings.when(pasEncoreDeClic)
+                .then("Cliquez sur un bouton")
+                .otherwise(Bindings.concat(nomDuButton," choisi " , nbFois, " fois")));
+        panneau.styleProperty().bind(Bindings.when(pasEncoreDeClic)
+                .then("-fx-background-color : white")
+                .otherwise(Bindings.concat("-fx-background-color : ",couleurPanneau)));
     }
 
-    private void bindTextDuHaut() {
-        Label texteDuHaut = new Label();
-        // Initial value is empty string, it changes to "Cliquez !" when pasEncoreDeClic is true
-        texteDuHaut.textProperty().bind(Bindings.when(pasEncoreDeClic)
-                .then("Cliquez !")
-                .otherwise(""));
-    }
+
 
 
     @Override
@@ -66,16 +66,13 @@ public class Palette extends Application {
 
         texteDuHaut = new Label();
         texteDuHaut.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        texteDuHaut.setText("Cliquez sur un boutons");
         BorderPane.setAlignment(texteDuHaut, Pos.CENTER);
 
         panneau = new Pane();
         panneau.setPrefSize(400, 200);
 
         VBox bas = new VBox();
-        nbfois = new SimpleIntegerProperty();
-        StringProperty nomDuButton = new SimpleStringProperty();
-        StringProperty couleurPanneau = new SimpleStringProperty("#000000");
+
         boutons = new HBox(10);
         boutons.setAlignment(Pos.CENTER);
         boutons.setPadding(new Insets(10, 5, 10, 5));
@@ -88,27 +85,29 @@ public class Palette extends Application {
         rouge = new Button("Rouge");
         bleu = new Button("Bleu");
 
+        createPasEncoreDeClicBinding();
         vert.addEventHandler(MouseEvent.MOUSE_CLICKED, actionEvent -> {
             nbVert ++;
-            nbfois.setValue(nbVert);
+            nbFois.setValue(nbVert);
             nomDuButton.setValue("Vert");
             couleurPanneau.setValue("green");
         });
         bleu.addEventHandler(MouseEvent.MOUSE_CLICKED, actionEvent -> {
             nbBleu ++;
-            nbfois.setValue(nbBleu);
+            nbFois.setValue(nbBleu);
             nomDuButton.setValue("Bleu");
             couleurPanneau.setValue("blue");
         });
         rouge.addEventHandler(MouseEvent.MOUSE_CLICKED, actionEvent -> {
             nbRouge ++;
-            nbfois.setValue(nbRouge);
+            nbFois.setValue(nbRouge);
             nomDuButton.setValue("Rouge");
             couleurPanneau.setValue("red");
         });
 
-        texteDuHaut.textProperty().bind(Bindings.concat(nomDuButton," choisi " , nbfois , " fois"));
-        panneau.styleProperty().bind(Bindings.concat("-fx-background-color : ",couleurPanneau));
+        texteDuBas.styleProperty().bind(Bindings.concat("-fx-text-fill : ",couleurPanneau));
+        texteDuBas.textProperty().bind(Bindings.concat(Bindings.concat("Le ", nomDuButton," est une tres jolie couleur")));
+
 
         /* VOTRE CODE ICI */
 
