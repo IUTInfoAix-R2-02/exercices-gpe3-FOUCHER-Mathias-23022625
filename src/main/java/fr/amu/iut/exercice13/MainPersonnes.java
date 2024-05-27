@@ -17,20 +17,23 @@ public class MainPersonnes {
         lesPersonnes = FXCollections.observableArrayList(personne -> new Observable[]{personne.ageProperty()});
 
         unChangementListener = change -> {
-            change.next();
-            if (change.wasAdded()) {
-                System.out.println("Personne ajoutée : " + change.getAddedSubList().get(0).getNom());
-            }
-            if (change.wasRemoved()) {
-                System.out.println("Personne effacé : " + change.getRemoved().get(0).getNom());
-            }
-            if (change.wasUpdated()) {
-                System.out.println(change.getList().get(change.getFrom()).getNom() + " a maintenant " + change.getList().get(change.getFrom()).getAge() + " ans");
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    System.out.println("Personne ajoutée : " + change.getAddedSubList().get(0).getNom());
+                }
+                if (change.wasRemoved()) {
+                    for (int i = 0; i < change.getRemovedSize(); i++) {
+                        System.out.println("Personne effacé : " + change.getRemoved().get(i).getNom());
+                    }
+                }
+                if (change.wasUpdated()) {
+                    System.out.println(change.getList().get(change.getFrom()).getNom() + " a maintenant " + change.getList().get(change.getFrom()).getAge() + " ans");
+                }
             }
         };
 
         lesPersonnes.addListener(unChangementListener);
-        question3();
+        question5();
     }
 
     public static void question1() {
@@ -62,7 +65,7 @@ public class MainPersonnes {
         lesPersonnes.add(jacques);
         paul.setAge(5);
     }
-}
+
 
     public static void question5() {
         Personne pierre = new Personne("Pierre", 20);
